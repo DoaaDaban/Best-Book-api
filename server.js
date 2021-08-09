@@ -3,22 +3,60 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const jwt = require('jsonwebtoken');
-const jwksClient = require('jwks-rsa');
+// const jwt = require('jsonwebtoken');
+// const jwksClient = require('jwks-rsa');
+const mongoose = require('mongoose');
 
-const app = express();
-app.use(cors());
+const server = express();
+server.use(cors());
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT;
 
-app.get('/test', (request, response) => {
+// const BookSchema= require('./Component/BookSchema');
+const myBookModel= require('./Component/BookModel');
 
-  // TODO: 
-  // STEP 1: get the jwt from the headers
-  // STEP 2. use the jsonwebtoken library to verify that it is a valid jwt
-  // jsonwebtoken dock - https://www.npmjs.com/package/jsonwebtoken
-  // STEP 3: to prove that everything is working correctly, send the opened jwt back to the front-end
 
+
+//MongoDB , To connect our server with mongoDB
+mongoose.connect('mongodb://localhost:27017/Book-collection', {useNewUrlParser: true, useUnifiedTopology: true});
+
+// to test connection
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  // we're connected!
+});
+
+
+
+ // Routes
+// http://localhost:3010/
+server.get('/',homeHandler);
+server.get('/books',getBooksHandler);
+
+//Handlers
+function homeHandler(req,res) {
+  res.send('Home Route');
+}
+
+// http://localhost:3010/books?email=doaadaban993@gmail.com
+function getBooksHandler(req,res) {
+  const reqBookEmail = req.query.email;
+  // search
+  console.log(reqBookEmail)
+
+  myBookModel.findOne({email:reqBookEmail},function(err,resultData){
+      if(err) {
+          console.log('Error');
+      }
+      else {
+         //  console.log(resultData[0].books);
+          console.log(resultData);
+          res.send(resultData);
+      }
+  })
+}
+
+server.listen(PORT,() => {
+  console.log(`Listening on PORT ${PORT}`);
 })
-
-app.listen(PORT, () => console.log(`listening on ${PORT}`));
