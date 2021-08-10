@@ -31,6 +31,8 @@ db.once('open', function() {
 // http://localhost:3010/
 server.get('/',homeHandler);
 server.get('/books',getBooksHandler);
+server.post('/addBook',addBookHandler);
+// server.delete('/deleteBook/:index',deleteBookHandler);
 
 //Handlers
 function homeHandler(req,res) {
@@ -50,6 +52,30 @@ function getBooksHandler(req,res) {
           res.send(resultData[0].books);
       }
   })
+}
+
+//http://localhost:3010/addBook?..
+function addBookHandler(req,res){
+  console.log(req.body);
+
+  const {email,title,description,status}= req.body;
+
+  myBookModel.find({email:email},(err,resultData)=>{
+    if(err){
+      res.send('not working');
+    }
+    else
+    {
+      resultData[0].books.push({
+        title: title,
+        description: description,
+        status: status,
+      })
+      resultData[0].save();
+      res.send(resultData[0].books);
+    }
+  })
+
 }
 
 server.listen(PORT,() => {
