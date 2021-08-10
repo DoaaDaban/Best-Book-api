@@ -13,12 +13,10 @@ server.use(cors());
 const PORT = process.env.PORT;
 
 // const BookSchema= require('./Component/BookSchema');
-const myBookModel= require('./Component/BookModel');
-
-
+const myBookModel= require('./Component/BookModel.js');
 
 //MongoDB , To connect our server with mongoDB
-mongoose.connect('mongodb://localhost:27017/Book-collection', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost:27017/Books-collections', {useNewUrlParser: true, useUnifiedTopology: true});
 
 // to test connection
 const db = mongoose.connection;
@@ -39,20 +37,17 @@ function homeHandler(req,res) {
   res.send('Home Route');
 }
 
-// http://localhost:3010/books?email=doaadaban993@gmail.com
+// http://localhost:3010/books?email=
 function getBooksHandler(req,res) {
   const reqBookEmail = req.query.email;
   // search
-  console.log(reqBookEmail)
-
-  myBookModel.findOne({email:reqBookEmail},function(err,resultData){
+  myBookModel.find({email:reqBookEmail},function(err,resultData){
       if(err) {
           console.log('Error');
       }
       else {
-         //  console.log(resultData[0].books);
-          console.log(resultData);
-          res.send(resultData);
+          console.log(resultData[0].books);
+          res.send(resultData[0].books);
       }
   })
 }
