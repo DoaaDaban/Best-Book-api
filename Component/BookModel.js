@@ -6,7 +6,6 @@ const BookSchema= require('./BookSchema')
 //compile the schema into a model
 // const myBookModel = mongoose.model('Book', BookSchema);
 
-
 const userSchema = new mongoose.Schema({
     email: { type: String, unique: true },
     books: [BookSchema] // a field that is an array of cat Schemas 
@@ -14,7 +13,6 @@ const userSchema = new mongoose.Schema({
 
   const userModel = mongoose.model('users', userSchema);
   mongoose.set('useCreateIndex', true);
-
 
 
 function seedUserCollection() {
