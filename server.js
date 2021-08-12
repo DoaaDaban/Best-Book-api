@@ -32,7 +32,7 @@ mongoose.connect('mongodb://localhost:27017/Book-collection', {useNewUrlParser: 
 // http://localhost:3010/
 server.get('/',homeHandler);
 server.get('/books',getBooksHandler);
-// server.post('/addBook',addBookHandler);
+server.post('/addbook',addBookHandler);
 // server.delete('/deleteBook/:index',deleteBookHandler);
 
 //Handlers
@@ -55,32 +55,32 @@ function getBooksHandler(req,res) {
   })
 }
 
-//http://localhost:3010/addBook?..
-// function addBookHandler(req,res){
-// res.send('test');
-//   console.log(req.body);
+//http://localhost:3010/addbook?..
+function addBookHandler(req,res){
+res.send('test');
+  console.log(req.body);
 
-//   const {title,description,image,status,email}= req.body;
+  const {title,description,image,status,email}= req.body;
 
-//   myBookModel.find({email:email},(err,resultData)=>{
-//     if(err){
-//       res.send('not working');
-//     }
-//     else
-//     {
-//       resultData[0].books.push({
-//         title: title,
-//         description: description,
-//         status: status,
-//         image: image,
-//       })
-//       resultData[0].save();
-//       res.send(resultData[0].books);
-//     }
-//   })
-// }
+  myBookModel.find({email:email},(err,resultData)=>{
+    if(err){
+      res.send('not working');
+    }
+    else
+    {
+      resultData[0].books.push({
+        title: title,
+        description: description,
+        status: status,
+        image: image,
+      })
+      resultData[0].save();
+      res.send(resultData[0].books);
+    }
+  })
+}
 
-// res.send(resultData[0].books);
+
 
 server.listen(PORT,() => {
   console.log(`Listening on PORT ${PORT}`);
