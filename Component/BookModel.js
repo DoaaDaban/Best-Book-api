@@ -7,7 +7,7 @@ const BookSchema= require('./BookSchema')
 // const myBookModel = mongoose.model('Book', BookSchema);
 
 const userSchema = new mongoose.Schema({
-    email: { type: String, unique: true },
+    email: { type: String },
     books: [BookSchema] // a field that is an array of cat Schemas 
   });
 
@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
 
 
 function seedUserCollection() {
-    const Doaa = new userModel({
+    const doaa = new userModel({
         email: 'doaadaban993@gmail.com',
         books : [
             {
@@ -40,7 +40,7 @@ function seedUserCollection() {
         ]
     })
 
-    const Khair = new userModel({
+    const khair = new userModel({
         email: 'shkokany98@gmail.com',
         books : [
             {
@@ -66,11 +66,11 @@ function seedUserCollection() {
             }
         ]
     })
-
-    Doaa.save();
-    Khair.save();
+    console.log(doaa);
+    doaa.save();
+    khair.save();
 }
 
-// seedUserCollection();
+seedUserCollection();
 
  module.exports =userModel;

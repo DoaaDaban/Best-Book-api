@@ -7,7 +7,7 @@ const BookSchema = new mongoose.Schema({
     title: String,
     description: String,
     status: String,
-    image : String
+    image : String,
   });
 
 
