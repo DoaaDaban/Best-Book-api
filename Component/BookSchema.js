@@ -8,6 +8,7 @@ const BookSchema = new mongoose.Schema({
     description: String,
     status: String,
     image : String,
+    
   });
 
 

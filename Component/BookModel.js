@@ -71,6 +71,6 @@ function seedUserCollection() {
     khair.save();
 }
 
-seedUserCollection();
+// seedUserCollection();
 
  module.exports =userModel;
