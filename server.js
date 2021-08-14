@@ -18,7 +18,7 @@ const PORT = process.env.PORT;
 const userModel= require('./Component/BookModel');
 
 //MongoDB , To connect our server with mongoDB
-mongoose.connect('mongodb://localhost:27017/Book-collection', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.connect('mongodb://localhost:27017/Book-collections', {useNewUrlParser: true, useUnifiedTopology: true});
 
 // to test connection
 // const db = mongoose.connection;
@@ -32,8 +32,8 @@ mongoose.connect('mongodb://localhost:27017/Book-collection', {useNewUrlParser: 
 // http://localhost:3010/
 server.get('/',homeHandler);
 server.get('/books',getBooksHandler);
-server.post('/addbook',addBookHandler);
-// server.delete('/deleteBook/:index',deleteBookHandler);
+server.post('/addbooks',addBookHandler);
+server.delete('/deleteBook/:index',deleteBookHandler);
 
 //Handlers
 function homeHandler(req,res) {
@@ -57,27 +57,55 @@ function getBooksHandler(req,res) {
 
 //http://localhost:3010/addbook?..
 function addBookHandler(req,res){
-res.send('test');
-  console.log(req.body);
 
-  const {title,description,image,status,email}= req.body;
+ 
 
-  myBookModel.find({email:email},(err,resultData)=>{
+  const {title,image,description,status,email}= req.body;
+
+  userModel.find({email:email},(err,resultData)=>{
     if(err){
       res.send('not working');
+      console.log(`didnt work the post method `);
     }
     else
     {
-      resultData[0].books.push({
-        title: title,
-        description: description,
-        status: status,
-        image: image,
-      })
-      resultData[0].save();
-      res.send(resultData[0].books);
+      
+        
+        resultData[0].books.push({
+          title: title,
+          description: description,
+          image:image,
+          status: status,
+        })
+        // console.log(resultData[0]);
+        resultData[0].save();
+        res.send(resultData[0].books);
+      
+    
     }
-  })
+  });
+}
+
+
+function deleteBookHandler(req,res) {
+
+  try {
+
+    const idx = req.params.index;
+    const email = 'shkokany98@gmail.com' ;
+console.log(idx);
+    userModel.findOne({email:email}, (error,deleteData)=>{
+let arr = deleteData.books;
+arr.splice(idx,1);
+arr.save();
+      res.json(arr)
+    })
+
+  }
+  catch (error){
+res.send(error);
+  }
+  
 }
 
 
