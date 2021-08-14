@@ -33,7 +33,8 @@ mongoose.connect('mongodb://localhost:27017/Book-collection', {useNewUrlParser: 
 server.get('/',homeHandler);
 server.get('/books',getBooksHandler);
 server.post('/addbook',addBookHandler);
-// server.delete('/deleteBook/:index',deleteBookHandler);
+server.delete('/deleteBook/:book_id',deleteBookHandler);
+server.put('/updateBook/:index',updateBookHandler);
 
 //Handlers
 function homeHandler(req,res) {
@@ -80,7 +81,30 @@ res.send('test');
   })
 }
 
+// http://localhost:3010/deleteBook/id..
+function deleteBookHandler(req,res){
+  userModel.deleteOne({_id:req.params.book_id},(err,resultBook)=>{
+    res.json(resultBook);
+  });
+}
 
+
+ 
+ function updateBookHandler(req,res) {
+  const index = req.params.index;
+  const {title,description,status,image} = req.body;
+  userModel.findOne({email:email},(err,resultData) => {
+      // console.log('findOne: ' ,resultData);
+      resultData.books.splice(index,1,{
+        title,
+        description,
+        status
+    
+      })
+      resultData.save();
+      res.send(resultData.books);
+  })
+}
 
 server.listen(PORT,() => {
   console.log(`Listening on PORT ${PORT}`);
